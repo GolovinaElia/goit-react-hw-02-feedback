@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Statistics from './components/Statistics/Statistics';
 import FeedbackOptions from './components/FeedbackOptions/FeedbackOptions';
 import Section from './components/Section/Section';
-import Notifications from './components/Notification/Notification';
 
 class App extends Component {
   state = {
@@ -10,45 +9,37 @@ class App extends Component {
     neutral: 0,
     bad: 0,
   };
-  handleIncrementGood = () => {
+
+  handleIncrement = event => {
+    const name = event.target.name;
     this.setState(prevState => ({
-      good: prevState.good + 1,
+      [name]: prevState[name] + 1,
     }));
   };
 
-  handleIncrementNeutral = () => {
-    this.setState(prevState => ({
-      neutral: prevState.neutral + 1,
-    }));
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    const total = good + neutral + bad;
+    return total;
   };
 
-  handleIncrementBad = () => {
-    this.setState(prevState => ({
-      bad: prevState.bad + 1,
-    }));
+  countPositiveFeedbackPercentage = () => {
+    const { good } = this.state;
+    const total = this.countTotalFeedback();
+    const positivePercentage = Math.round((good * 100) / total);
+    return positivePercentage;
   };
-
-  // countTotalFeedback() {
-  //     const total = good + neutral + bad;
-
-  // };
-
-  // countPositiveFeedbackPercentage() {
-  //     const positivePercentage = Math.round(good * 100 / total);
-  // };
 
   render() {
     const { good, neutral, bad } = this.state;
-    const total = good + neutral + bad;
-    const positivePercentage = Math.round((good * 100) / total);
+    const total = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
 
     return (
-      <Section title="Feedback">
+      <Section title="Please leave feedback">
         <FeedbackOptions
-          onLeaveFeedback={'Please leave feedback'}
-          onIncrementGood={this.handleIncrementGood}
-          onIncrementNeutral={this.handleIncrementNeutral}
-          onIncrementBad={this.handleIncrementBad}
+          options={['good', 'neutral', 'bad']}
+          onLeaveFeedback={this.handleIncrement}
         />
 
         <Statistics
@@ -58,8 +49,6 @@ class App extends Component {
           total={total}
           positivePercentage={positivePercentage}
         />
-
-        <Notifications message="No feedback given" />
       </Section>
     );
   }

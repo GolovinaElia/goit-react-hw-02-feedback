@@ -1,15 +1,12 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styles from './Notification.module.css';
 
 const Notification = ({ message }) => (
-  <div className={styles.notification}>
-    {message ? <p className={styles.notificate}>{message}</p> : null}
-  </div>
+  <p className={styles.notificate}>{message}</p>
 );
 
-// Notification.propTypes = {
-//   text: PropTypes.string.isRequired,
-//   type: PropTypes.oneOf(['success', 'error']),
-// };
+Notification.propTypes = {
+  message: PropTypes.string.isRequired,
+};
 
 export default Notification;
